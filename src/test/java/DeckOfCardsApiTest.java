@@ -8,7 +8,7 @@ import org.testng.annotations.Test;
 
 import java.util.List;
 
-public class DeckOfCardsApiTest {
+public class DeckOfCardsApiTest extends BaseTest{
     RequestSpecification request;
     Response response;
     JsonPath jp;
