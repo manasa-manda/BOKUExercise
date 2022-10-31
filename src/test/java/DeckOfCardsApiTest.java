@@ -26,7 +26,16 @@ public class DeckOfCardsApiTest {
         Assert.assertEquals(response.statusCode(), 200);
         Assert.assertEquals(deckCreated, true);
     }
-
+    @Test
+    public void drawCardWithDeckId() {
+        response = request.get("/new");
+        String deckId = jp.get("deck_id");
+        response = request.get("/"+deckId+"/draw/?count=2");
+        jp = response.jsonPath();
+        List<String> cardsDrawn = jp.get("cards");
+        Assert.assertEquals(response.statusCode(), 200);
+        Assert.assertEquals(cardsDrawn.size(), 2);
+    }
     @Test
     public void drawCardFromNewDeck() {
         response = request.get("/new/draw/?count=3");
@@ -37,21 +46,10 @@ public class DeckOfCardsApiTest {
     }
 
     @Test
-    public void drawCardWithDeckId() {
-        JsonPath jps= response.jsonPath();
-        response = request.get("/new");
-        String deckId = jps.get("deck_id");
-        response = request.get("/"+deckId+"/draw/?count=3");
-        List<String> cardsDrawn = jps.get("cards");
-        Assert.assertEquals(response.statusCode(), 200);
-        Assert.assertEquals(cardsDrawn.size(), 3);
-    }
-
-    @Test
     public void addJokerToDeck(){
         response = request.queryParam("jokers_enabled", "true").get("/new");
-        JsonPath jph = response.jsonPath();
-        boolean success = jph.get("success");
+        jp = response.jsonPath();
+        boolean success = jp.get("success");
         Assert.assertEquals(response.statusCode(), 200);
         Assert.assertTrue(success, "true");
     }
